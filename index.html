@@ -1,52 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wumpus Logic Agent</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="app">
-    <header>
-      <h1>⚠ Wumpus Logic Agent</h1>
-      <p class="subtitle">Knowledge-Based Propositional Inference Engine</p>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wumpus Logic Agent</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <h1>⚠ Wumpus Logic Agent</h1>
+        <p class="subtitle">Knowledge-Based Propositional Inference Engine</p>
+      </header>
 
-    <div class="controls">
-      <label>Rows: <input type="number" id="rows" value="4" min="3" max="8"/></label>
-      <label>Cols: <input type="number" id="cols" value="4" min="3" max="8"/></label>
-      <button id="startBtn">New Episode</button>
-      <button id="stepBtn" disabled>Step Agent</button>
-    </div>
+      <div class="controls">
+        <label
+          >Rows: <input type="number" id="rows" value="4" min="3" max="8"
+        /></label>
+        <label
+          >Cols: <input type="number" id="cols" value="4" min="3" max="8"
+        /></label>
+        <button id="startBtn">New Episode</button>
+        <button id="stepBtn" disabled>Step Agent</button>
+      </div>
 
-    <div class="main-layout">
-      <div id="grid-container"></div>
+      <div class="main-layout">
+        <div id="grid-container"></div>
 
-      <div class="sidebar">
-        <div class="panel" id="percept-panel">
-          <h2>Current Percepts</h2>
-          <ul id="percept-list"><li>None</li></ul>
+        <div class="sidebar">
+          <div class="panel" id="percept-panel">
+            <h2>Current Percepts</h2>
+            <ul id="percept-list">
+              <li>None</li>
+            </ul>
+          </div>
+          <div class="panel" id="kb-panel">
+            <h2>Knowledge Base</h2>
+            <ul id="kb-list">
+              <li>Empty</li>
+            </ul>
+          </div>
+          <div class="panel" id="metrics-panel">
+            <h2>Metrics</h2>
+            <p>Inference Steps: <span id="inf-steps">0</span></p>
+            <p>Cells Visited: <span id="cells-visited">0</span></p>
+            <p>Agent Status: <span id="agent-status">Idle</span></p>
+          </div>
         </div>
-        <div class="panel" id="kb-panel">
-          <h2>Knowledge Base</h2>
-          <ul id="kb-list"><li>Empty</li></ul>
-        </div>
-        <div class="panel" id="metrics-panel">
-          <h2>Metrics</h2>
-          <p>Inference Steps: <span id="inf-steps">0</span></p>
-          <p>Cells Visited: <span id="cells-visited">0</span></p>
-          <p>Agent Status: <span id="agent-status">Idle</span></p>
-        </div>
+      </div>
+
+      <div id="log-box">
+        <h2>Agent Log</h2>
+        <div id="log-content"></div>
       </div>
     </div>
 
-    <div id="log-box">
-      <h2>Agent Log</h2>
-      <div id="log-content"></div>
-    </div>
-  </div>
-
-  <script src="agent.js"></script>
-</body>
+    <script src="agent.js"></script>
+  </body>
 </html>

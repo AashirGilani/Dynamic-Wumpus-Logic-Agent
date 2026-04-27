@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap");
 
 :root {
   --bg: #0a0e1a;
@@ -16,17 +16,24 @@
   --dim: #4a5568;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   min-height: 100vh;
   padding: 20px;
 }
 
-.app { max-width: 1100px; margin: 0 auto; }
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+}
 
 header {
   text-align: center;
@@ -36,7 +43,7 @@ header {
 }
 
 header h1 {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 2rem;
   color: var(--accent);
   letter-spacing: 2px;
@@ -73,7 +80,7 @@ header h1 {
   border: 1px solid var(--border);
   color: var(--accent);
   padding: 4px 8px;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
   font-size: 0.9rem;
   border-radius: 4px;
   text-align: center;
@@ -81,7 +88,7 @@ header h1 {
 
 button {
   padding: 8px 20px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 0.75rem;
   letter-spacing: 1px;
   border: none;
@@ -95,7 +102,9 @@ button {
   color: var(--bg);
 }
 
-#startBtn:hover { background: #33ddff; }
+#startBtn:hover {
+  background: #33ddff;
+}
 
 #stepBtn {
   background: var(--accent2);
@@ -108,7 +117,9 @@ button {
   opacity: 0.5;
 }
 
-#stepBtn:not(:disabled):hover { background: #ff8c5a; }
+#stepBtn:not(:disabled):hover {
+  background: #ff8c5a;
+}
 
 .main-layout {
   display: grid;
@@ -145,7 +156,9 @@ button {
   justify-content: center;
   font-size: 1.3rem;
   position: relative;
-  transition: background 0.3s, border-color 0.3s;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
 }
 
 .cell.safe {
@@ -192,7 +205,7 @@ button {
 }
 
 .panel h2 {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 0.7rem;
   color: var(--accent);
   letter-spacing: 1px;
@@ -220,9 +233,15 @@ button {
   font-weight: bold;
 }
 
-#agent-status.alive { color: var(--safe-border); }
-#agent-status.dead { color: var(--danger-border); }
-#agent-status.won { color: #ffd700; }
+#agent-status.alive {
+  color: var(--safe-border);
+}
+#agent-status.dead {
+  color: var(--danger-border);
+}
+#agent-status.won {
+  color: #ffd700;
+}
 
 #log-box {
   background: var(--surface);
@@ -232,7 +251,7 @@ button {
 }
 
 #log-box h2 {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 0.7rem;
   color: var(--accent);
   letter-spacing: 1px;
@@ -247,12 +266,27 @@ button {
   color: var(--dim);
 }
 
-#log-content p { border-bottom: 1px solid #1a2035; padding: 2px 0; }
-#log-content p.highlight { color: var(--accent); }
-#log-content p.warn { color: var(--accent2); }
-#log-content p.danger { color: var(--danger-border); }
+#log-content p {
+  border-bottom: 1px solid #1a2035;
+  padding: 2px 0;
+}
+#log-content p.highlight {
+  color: var(--accent);
+}
+#log-content p.warn {
+  color: var(--accent2);
+}
+#log-content p.danger {
+  color: var(--danger-border);
+}
 
 @media (max-width: 700px) {
-  .main-layout { grid-template-columns: 1fr; }
-  .cell { width: 52px; height: 52px; font-size: 1rem; }
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .cell {
+    width: 52px;
+    height: 52px;
+    font-size: 1rem;
+  }
 }
