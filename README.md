@@ -1,4 +1,4 @@
-# Wumpus Logic Agent — AI2002 Assignment 6
+# Wumpus Logic Agent
 
 A web-based Knowledge-Based Agent that navigates a Wumpus World grid using **Propositional Logic** and **Resolution Refutation** to deduce safe cells.
 
@@ -18,12 +18,12 @@ A web-based Knowledge-Based Agent that navigates a Wumpus World grid using **Pro
 
 ## Tech Stack
 
-| Layer      | Technology          |
-|------------|---------------------|
-| Backend    | Python 3, Flask     |
-| Logic      | Custom CNF + Resolution (logic.py) |
-| Environment | Wumpus World (wumpus.py) |
-| Frontend   | HTML, CSS, Vanilla JS |
+| Layer       | Technology                         |
+| ----------- | ---------------------------------- |
+| Backend     | Python 3, Flask                    |
+| Logic       | Custom CNF + Resolution (logic.py) |
+| Environment | Wumpus World (wumpus.py)           |
+| Frontend    | HTML, CSS, Vanilla JS              |
 
 ---
 
@@ -70,17 +70,23 @@ http://localhost:5000
 ## Logic Overview
 
 ### CNF Conversion
+
 Each breeze percept `B_r_c = True` adds the clause:
+
 ```
 {P_adj1, P_adj2, ...}  (at least one adjacent pit)
 ```
+
 Each `B_r_c = False` adds:
+
 ```
 {NOT_P_adj}  for every adjacent cell (no pits nearby)
 ```
 
 ### Resolution Refutation
+
 To prove a cell `(r,c)` is safe:
+
 1. Add `NOT_P_r_c` (negated goal: "there IS a pit here") to KB clauses
 2. Repeatedly resolve complementary literals between clause pairs
 3. If the **empty clause ⊥** is derived → contradiction → cell is proven **safe**
@@ -90,6 +96,7 @@ To prove a cell `(r,c)` is safe:
 ## Deployment (Vercel)
 
 This is a Flask app. For Vercel deployment:
+
 1. Add a `vercel.json` routing Flask via a WSGI adapter
 2. Or deploy to **Render** / **Railway** (native Flask support):
    ```
@@ -100,5 +107,4 @@ This is a Flask app. For Vercel deployment:
 
 ## Author
 
-AI2002 — Artificial Intelligence, Spring 2026  
-National University of Computer & Emerging Sciences, Chiniot-Faisalabad Campus
+Ali Aashir
