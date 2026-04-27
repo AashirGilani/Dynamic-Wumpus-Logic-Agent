@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wumpus Logic Agent</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0d0d0d;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #f0c040;
+      margin-bottom: 16px;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .top-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Setup panel */
+    .panel {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+
+    .panel h3 {
+      color: #f0c040;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    label { font-size: 0.8rem; color: #aaa; }
+
+    input[type=number] {
+      width: 52px;
+      background: #111;
+      border: 1px solid #444;
+      color: #e0e0e0;
+      padding: 3px 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      border-radius: 3px;
+      margin-left: 6px;
+    }
+
+    .setup-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+    button {
+      background: #2a2a2a;
+      border: 1px solid #555;
+      color: #e0e0e0;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover { background: #3a3a3a; }
+    button.primary { border-color: #f0c040; color: #f0c040; }
+    button.primary:hover { background: #2a2200; }
+
+    /* Metrics */
+    .metrics { flex: 1; min-width: 180px; }
+    .metric-item {
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .metric-item span.val { color: #f0c040; font-weight: bold; }
+
+    /* Grid */
+    .grid-wrapper { margin-bottom: 14px; }
+
+    #grid-table {
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    #grid-table td {
+      width: 72px;
+      height: 72px;
+      border: 1px solid #333;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 0.72rem;
+      position: relative;
+      cursor: default;
+      transition: background 0.2s;
+    }
+
+    /* Cell colors */
+    .cell-unknown  { background: #1e1e1e; color: #555; }
+    .cell-visited  { background: #1a2a1a; color: #88cc88; }
+    .cell-safe     { background: #0a2a0a; color: #44aa44; border: 1px solid #2a6a2a; }
+    .cell-pit      { background: #2a0a0a; color: #cc4444; }
+    .cell-wumpus   { background: #2a0a2a; color: #cc44cc; }
+
+    .agent-icon { font-size: 1.4rem; }
+    .cell-label { font-size: 0.65rem; color: #888; margin-top: 2px; }
+    .percept-tag {
+      font-size: 0.6rem;
+      color: #88aaff;
+      display: block;
+    }
+
+    /* Controls */
+    .controls { text-align: center; margin-bottom: 12px; }
+    .controls .dir-grid {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 40px);
+      grid-template-rows: repeat(3, 40px);
+      gap: 4px;
+    }
+    .controls .dir-grid button {
+      width: 40px; height: 40px;
+      padding: 0;
+      font-size: 1rem;
+    }
+    .controls .dir-grid .empty { background: none; border: none; cursor: default; }
+
+    /* Log */
+    #log {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      height: 130px;
+      overflow-y: auto;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+    #log .entry { margin-bottom: 3px; }
+    #log .entry.good { color: #88cc88; }
+    #log .entry.bad  { color: #cc6666; }
+    #log .entry.info { color: #88aaff; }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.72rem;
+      margin-bottom: 10px;
+      justify-content: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-dot {
+      width: 12px; height: 12px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    #status-banner {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      min-height: 24px;
+    }
+    #status-banner.win  { color: #f0c040; }
+    #status-banner.dead { color: #cc4444; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>⚔ WUMPUS LOGIC AGENT</h1>
+
+  <div class="top-row">
+    <!-- Setup -->
+    <div class="panel" style="flex:2; min-width:220px;">
+      <h3>Setup</h3>
+      <div class="setup-row">
+        <label>Rows <input type="number" id="inp-rows" value="4" min="3" max="7"/></label>
+        <label>Cols <input type="number" id="inp-cols" value="4" min="3" max="7"/></label>
+        <button class="primary" onclick="newGame()">New Game</button>
+        <button onclick="runInfer()">Run Inference</button>
+      </div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="panel metrics">
+      <h3>Metrics</h3>
+      <div class="metric-item">Inference Steps <span class="val" id="m-steps">0</span></div>
+      <div class="metric-item">Current Percepts <span class="val" id="m-percepts">—</span></div>
+      <div class="metric-item">Agent Position <span class="val" id="m-pos">—</span></div>
+      <div class="metric-item">Status <span class="val" id="m-status">—</span></div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#1e1e1e;border:1px solid #444"></span> Unknown</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1a2a1a"></span> Visited</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#0a2a0a;border:1px solid #2a6a2a"></span> Safe (proven)</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#2a0a0a"></span> Pit</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#2a0a2a"></span> Wumpus</div>
+  </div>
+
+  <div id="status-banner"></div>
+
+  <!-- Grid -->
+  <div class="grid-wrapper">
+    <table id="grid-table"><tbody id="grid-body"></tbody></table>
+  </div>
+
+  <!-- Direction Controls -->
+  <div class="controls">
+    <div class="dir-grid">
+      <div class="empty"></div>
+      <button onclick="doMove('up')">▲</button>
+      <div class="empty"></div>
+      <button onclick="doMove('left')">◄</button>
+      <div class="empty"></div>
+      <button onclick="doMove('right')">►</button>
+      <div class="empty"></div>
+      <button onclick="doMove('down')">▼</button>
+      <div class="empty"></div>
+    </div>
+  </div>
+
+  <!-- Log -->
+  <div id="log"><div class="entry info">Start a new game above.</div></div>
+</div>
+
+<script>
+  let gameAlive = false;
+
+  function addLog(msg, cls='') {
+    const log = document.getElementById('log');
+    const div = document.createElement('div');
+    div.className = 'entry ' + cls;
+    div.textContent = msg;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function renderGrid(state) {
+    const tbody = document.getElementById('grid-body');
+    tbody.innerHTML = '';
+    state.grid.forEach(row => {
+      const tr = document.createElement('tr');
+      row.forEach(cell => {
+        const td = document.createElement('td');
+        let cls = 'cell-' + cell.status;
+        td.className = cls;
+
+        let inner = '';
+        if (cell.is_agent) inner += '<div class="agent-icon">🧭</div>';
+        else if (cell.is_gold) inner += '<div class="agent-icon">🪙</div>';
+
+        inner += `<div class="cell-label">(${cell.r},${cell.c})</div>`;
+
+        if (cell.percepts && cell.percepts.length) {
+          cell.percepts.forEach(p => {
+            inner += `<span class="percept-tag">${p === 'Breeze' ? '💨' : '💀'} ${p}</span>`;
+          });
+        }
+
+        if (cell.status === 'safe' && !cell.is_agent) {
+          inner += '<span class="percept-tag" style="color:#44aa44">✓ Safe</span>';
+        }
+        if (cell.status === 'unknown') inner += '<span style="color:#444">?</span>';
+
+        td.innerHTML = inner;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+
+    // Update metrics
+    document.getElementById('m-steps').textContent = state.inference_steps;
+    document.getElementById('m-percepts').textContent =
+      state.current_percepts.length ? state.current_percepts.join(', ') : 'None';
+    document.getElementById('m-pos').textContent =
+      `(${state.agent[0]}, ${state.agent[1]})`;
+    document.getElementById('m-status').textContent =
+      state.alive ? (state.gold_found ? 'WON 🏆' : 'Alive') : 'Dead 💀';
+
+    const banner = document.getElementById('status-banner');
+    if (!state.alive) {
+      banner.textContent = '💀 Agent Died! Start a new game.';
+      banner.className = 'dead';
+      gameAlive = false;
+    } else if (state.gold_found) {
+      banner.textContent = '🏆 Gold Found! You Win!';
+      banner.className = 'win';
+    } else {
+      banner.textContent = '';
+      banner.className = '';
+    }
+  }
+
+  async function newGame() {
+    const rows = parseInt(document.getElementById('inp-rows').value);
+    const cols = parseInt(document.getElementById('inp-cols').value);
+    document.getElementById('log').innerHTML = '';
+    document.getElementById('status-banner').textContent = '';
+
+    const res = await fetch('/api/new_game', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({rows, cols})
+    });
+    const data = await res.json();
+    if (data.ok) {
+      gameAlive = true;
+      renderGrid(data.state);
+      addLog(`New ${rows}x${cols} game started. Agent at (0,0).`, 'info');
+      addLog('Use arrow buttons to move. Inference runs after each move.', 'info');
+    }
+  }
+
+  async function doMove(direction) {
+    if (!gameAlive) { addLog('Start a new game first.', 'bad'); return; }
+    const res = await fetch('/api/move', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({direction})
+    });
+    const data = await res.json();
+    if (!data.ok) { addLog(data.message, 'bad'); return; }
+
+    data.log.forEach(l => addLog(l, data.dead ? 'bad' : 'good'));
+
+    if (data.infer_log && data.infer_log.length) {
+      data.infer_log.forEach(l => addLog(l, 'info'));
+    }
+
+    if (data.state) renderGrid(data.state);
+  }
+
+  async function runInfer() {
+    if (!gameAlive) { addLog('Start a new game first.', 'bad'); return; }
+    const res = await fetch('/api/infer', {method:'POST',
+      headers:{'Content-Type':'application/json'}, body:'{}'});
+    const data = await res.json();
+    addLog(`Manual inference: ${data.steps} steps taken.`, 'info');
+    if (data.infer_log && data.infer_log.length) {
+      data.infer_log.forEach(l => addLog(l, 'info'));
+    } else {
+      addLog('No new safe cells found.', 'info');
+    }
+    if (data.state) renderGrid(data.state);
+  }
+
+  // Keyboard controls
+  document.addEventListener('keydown', e => {
+    const map = {ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left', ArrowRight:'right'};
+    if (map[e.key]) { e.preventDefault(); doMove(map[e.key]); }
+  });
+</script>
+</body>
+</html>
