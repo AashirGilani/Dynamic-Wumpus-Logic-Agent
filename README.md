@@ -1,7 +1,7 @@
 # Wumpus Logic Agent 
 
 A web-based Knowledge-Based Agent that navigates a Wumpus World grid using **Propositional Logic** and **Resolution Refutation** to deduce safe cells.
-
+Live Demo: dynamic-wumpus-logic-agent-pi.vercel.app
 ---
 
 ## Features
