@@ -7,12 +7,12 @@ A web-based Knowledge-Based Agent that navigates a Wumpus World grid using **Pro
 ## Features
 
 - **Dynamic grid sizing** (3×3 up to 7×7), configurable at runtime
-- **Random hazard placement** — Pits and a Wumpus placed randomly each game
-- **Percept generation** — Breeze near pits, Stench near the Wumpus
-- **Propositional Logic KB** — updated with biconditional rules after each move
-- **Resolution Refutation Engine** — automatically converts KB to CNF and resolves clauses to prove `¬P` and `¬W` for unvisited cells
-- **Real-time metrics** — inference step count and current percepts displayed live
-- **Color-coded grid** — Green (Safe), Dark (Unknown), Red (Pit), Purple (Wumpus)
+- **Random hazard placement**  Pits and a Wumpus placed randomly each game
+- **Percept generation**  Breeze near pits, Stench near the Wumpus
+- **Propositional Logic KB**  updated with biconditional rules after each move
+- **Resolution Refutation Engine**  automatically converts KB to CNF and resolves clauses to prove `¬P` and `¬W` for unvisited cells
+- **Real-time metrics**  inference step count and current percepts displayed live
+- **Color-coded grid**  Green (Safe), Dark (Unknown), Red (Pit), Purple (Wumpus)
 
 ---
 
